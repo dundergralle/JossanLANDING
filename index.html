@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080505">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Jossan</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:  #c9a84c;
+  --gold2: #e8c97a;
+  --rose:  #d4788a;
+  --cream: #f5ede0;
+  --dark:  #080505;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { min-height:100dvh; font-family:'Jost',sans-serif; background:var(--dark); overflow-x:hidden; -webkit-text-size-adjust:100%; touch-action:manipulation; overscroll-behavior:none; }
+.bg { position:fixed; inset:0; z-index:0; background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 0% 60%, rgba(212,120,138,0.08) 0%, transparent 55%), linear-gradient(160deg, #0e0808 0%, #080505 50%, #0c0808 100%); }
+.grid { position:fixed; inset:0; z-index:1; pointer-events:none; background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size:60px 60px; animation:grid-drift 20s linear infinite; }
+@keyframes grid-drift { 0%{background-position:0 0} 100%{background-position:60px 60px} }
+.top-bar { position:fixed; top:0; left:0; right:0; height:1px; z-index:20; background:linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--gold), transparent); }
+.corner { position:fixed; z-index:5; pointer-events:none; width:50px; height:50px; opacity:0.35; }
+.corner-tl { top:14px; left:14px; border-top:1px solid var(--gold); border-left:1px solid var(--gold); }
+.corner-tr { top:14px; right:14px; border-top:1px solid var(--gold); border-right:1px solid var(--gold); }
+.corner-bl { bottom:14px; left:14px; border-bottom:1px solid var(--gold); border-left:1px solid var(--gold); }
+.corner-br { bottom:14px; right:14px; border-bottom:1px solid var(--gold); border-right:1px solid var(--gold); }
+.dust { position:fixed; inset:0; z-index:2; pointer-events:none; }
+.d { position:absolute; border-radius:50%; animation:dust-float ease-in-out infinite; opacity:0; }
+@keyframes dust-float { 0%{transform:translateY(0) scale(0.5);opacity:0;} 20%{opacity:0.7;} 80%{opacity:0.3;} 100%{transform:translateY(-70px) scale(1.5);opacity:0;} }
+.content { position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100dvh; padding:max(2.5rem, env(safe-area-inset-top)) 1.5rem max(2.5rem, env(safe-area-inset-bottom)); }
+.av-wrap { position:relative; width:112px; height:112px; margin-bottom:1.2rem; }
+.av-ring { position:absolute; inset:-4px; border-radius:50%; background:conic-gradient(var(--gold), #fff8e8, var(--gold2), var(--rose), var(--gold), #fff8e8, var(--gold)); animation:spin 8s linear infinite; box-shadow:0 0 20px rgba(201,168,76,0.4); }
+@keyframes spin { to { transform:rotate(360deg); } }
+.av-inner { position:absolute; inset:3px; border-radius:50%; background:var(--dark); z-index:1; }
+.av-placeholder { position:absolute; inset:5px; z-index:2; border-radius:50%; background:linear-gradient(135deg, #1a0f0f, #2a1a0a); display:flex; align-items:center; justify-content:center; font-size:2.8rem; }
+.badge { position:absolute; bottom:-4px; right:-4px; z-index:3; font-size:20px; animation:badge-float 3s ease-in-out infinite; filter:drop-shadow(0 2px 4px rgba(201,168,76,0.5)); }
+@keyframes badge-float { 0%,100%{transform:translateY(0) rotate(-8deg);} 50%{transform:translateY(-4px) rotate(8deg);} }
+h1 { font-family:'Playfair Display',serif; font-style:italic; font-size:3.2rem; font-weight:700; color:var(--cream); text-align:center; margin-bottom:0.15rem; letter-spacing:0.06em; text-shadow:0 0 30px rgba(201,168,76,0.3), 0 2px 8px rgba(0,0,0,0.8); animation:name-shimmer 4s ease-in-out infinite; }
+@keyframes name-shimmer { 0%,100%{text-shadow:0 0 30px rgba(201,168,76,0.3), 0 2px 8px rgba(0,0,0,0.8);} 50%{text-shadow:0 0 50px rgba(201,168,76,0.6), 0 0 80px rgba(212,120,138,0.2), 0 2px 8px rgba(0,0,0,0.8);} }
+.tagline { font-family:'Jost',sans-serif; font-weight:200; font-size:0.72rem; letter-spacing:0.35em; text-transform:uppercase; color:rgba(201,168,76,0.7); margin-bottom:0.8rem; text-align:center; }
+.divider { display:flex; align-items:center; gap:10px; margin-bottom:1.4rem; width:220px; }
+.divider::before,.divider::after { content:''; flex:1; height:1px; background:linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent); }
+.divider-icon { color:var(--gold); font-size:0.65rem; letter-spacing:0.15em; font-family:'Jost',sans-serif; font-weight:300; }
+.loc { display:inline-flex; align-items:center; gap:6px; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(201,168,76,0.55); margin-bottom:1.6rem; font-family:'Jost',sans-serif; font-weight:300; }
+.loc-dot { width:4px; height:4px; border-radius:50%; background:var(--rose); box-shadow:0 0 6px var(--rose); animation:pulse 2.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.btns { display:flex; flex-direction:column; gap:0.65rem; width:100%; max-width:290px; }
+.btn-wrap { position:relative; width:100%; background:linear-gradient(90deg, rgba(201,168,76,0.35), rgba(201,168,76,0.15), rgba(201,168,76,0.35)); clip-path:polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%); padding:1px; }
+.btn { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; width:100%; min-height:56px; padding:0 1.5rem; -webkit-tap-highlight-color:transparent; background:rgba(255,255,255,0.03); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); color:var(--cream); font-family:'Jost',sans-serif; font-size:0.72rem; font-weight:400; letter-spacing:0.25em; text-transform:uppercase; text-decoration:none; text-align:center; cursor:pointer; touch-action:manipulation; user-select:none; -webkit-user-select:none; transition:transform 0.12s, background 0.2s; clip-path:polygon(11px 0%, 100% 0%, calc(100% - 11px) 100%, 0% 100%); border:none; }
+.btn-primary { background:linear-gradient(135deg, rgba(201,168,76,0.22) 0%, rgba(180,120,80,0.18) 100%); color:var(--gold2); font-weight:500; letter-spacing:0.28em; text-shadow:0 0 12px rgba(201,168,76,0.4); animation:btn-glow 3s ease-in-out infinite; }
+@keyframes btn-glow { 0%,100%{box-shadow:inset 0 1px 0 rgba(232,201,122,0.2);} 50%{box-shadow:inset 0 1px 0 rgba(232,201,122,0.2), 0 0 20px rgba(201,168,76,0.15);} }
+.btn::after { content:''; position:absolute; top:0; left:-100%; width:50%; height:100%; background:linear-gradient(90deg, transparent, rgba(201,168,76,0.1), transparent); animation:shimmer 4s ease-in-out infinite; }
+@keyframes shimmer { 0%,60%{left:-100%;} 100%{left:140%;} }
+.btn:active { transform:scale(0.97); }
+@media(hover:hover){ .btn:hover{background:rgba(201,168,76,0.1);} }
+.footer { margin-top:2rem; font-family:'Playfair Display',serif; font-style:italic; font-size:0.7rem; color:rgba(201,168,76,0.25); letter-spacing:0.08em; }
+@media(max-width:430px){
+  h1{font-size:2.2rem;}
+  .av-wrap{width:92px;height:92px;}
+  .btns{max-width:100%;}
+  .btn{min-height:52px;font-size:0.68rem;}
+  .tagline{font-size:0.65rem;letter-spacing:0.25em;}
+  .divider{width:180px;}
+}
+@media(max-width:360px){
+  h1{font-size:1.9rem;}
+  .av-wrap{width:80px;height:80px;}
+  .btn{min-height:48px;font-size:0.62rem;}
+}
+@media(max-height:700px){
+  .av-wrap{width:86px;height:86px;margin-bottom:0.8rem;}
+  h1{font-size:2.2rem;}
+  .loc{margin-bottom:1.1rem;}
+  .btns{gap:0.5rem;}
+  .btn{min-height:50px;}
+  .footer{margin-top:1.2rem;}
+}
+@media(max-height:600px){
+  .av-wrap{width:72px;height:72px;margin-bottom:0.5rem;}
+  h1{font-size:1.8rem;}
+  .tagline{margin-bottom:0.5rem;}
+  .divider{margin-bottom:0.8rem;}
+  .loc{margin-bottom:0.8rem;}
+  .btns{gap:0.4rem;}
+  .btn{min-height:44px;}
+  .footer{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="bg"></div>
+<div class="grid"></div>
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+<div class="dust" id="dust"></div>
+<div class="content">
+  <div class="av-wrap">
+    <div class="av-ring"></div>
+    <div class="av-inner"></div>
+    <img class="av-img" src="DIN-BILD-URL-HÄR" alt="Jossan" style="position:absolute;inset:5px;z-index:2;width:calc(100% - 10px);height:calc(100% - 10px);border-radius:50%;object-fit:cover;">
+    <span class="badge">💎</span>
+  </div>
+  <h1>Jossan</h1>
+  <p class="tagline">glam, gains & good vibes 🥂</p>
+  <div class="divider"><span class="divider-icon">✦ ✦ ✦</span></div>
+  <div class="loc"><span class="loc-dot"></span><span id="loc-text">loading...</span></div>
+  <div class="btns">
+    <div class="btn-wrap"><a class="btn btn-primary" href="/link">✦ skriv till mig</a></div>
+    <div class="btn-wrap"><a class="btn" href="X-URL-HÄR" target="_blank">twitter / x</a></div>
+  </div>
+  <p class="footer">jossan — livet på max</p>
+</div>
+<script>
+(function(){
+  var c=document.getElementById('dust');
+  var cols=['#c9a84c','#e8c97a','#d4788a','#f0d890'];
+  for(var i=0;i<40;i++){
+    var d=document.createElement('div'); d.className='d';
+    var s=Math.random()*2+0.8;
+    d.style.cssText='left:'+(Math.random()*100)+'%;top:'+(20+Math.random()*80)+'%;width:'+s+'px;height:'+s+'px;background:'+cols[Math.floor(Math.random()*cols.length)]+';animation-duration:'+(6+Math.random()*10)+'s;animation-delay:'+(-Math.random()*10)+'s;box-shadow:0 0 '+(s*3)+'px '+cols[0]+';';
+    c.appendChild(d);
+  }
+})();
+(function(){
+  var f=['Stockholm','Göteborg','Malmö','Helsingborg','Uppsala','Oslo','Bergen','Copenhagen','Dubai','Monaco','Paris','Milano','London','Ibiza','Marbella'];
+  function setCity(c){ document.getElementById('loc-text').textContent='5 minutes ago in: '+(c&&c.trim().length>1?c.trim():f[Math.floor(Math.random()*f.length)]); }
+  function get(u,e){ return fetch(u,{cache:'no-store'}).then(r=>r.json()).then(d=>{var v=e(d);if(!v||v.trim().length<2)throw 0;return v;}); }
+  get('https://ipinfo.io/json',d=>d&&d.city)
+    .catch(()=>get('https://ip-api.com/json/?fields=city,regionName',d=>d&&(d.city||d.regionName)))
+    .catch(()=>get('https://ipapi.co/json/',d=>d&&(d.city||d.region)))
+    .then(setCity).catch(()=>setCity(null));
+})();
+</script>
+</body>
+</html>
